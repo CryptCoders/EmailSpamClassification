@@ -4,9 +4,10 @@ import string
 from nltk.corpus import stopwords
 import nltk
 from nltk.stem.porter import PorterStemmer
+from googletrans import Translator
 
 ps = PorterStemmer()
-
+translator = Translator()
 
 def transform_text(text):
     text = text.lower()
@@ -32,15 +33,14 @@ def transform_text(text):
 
     return " ".join(y)
 
-tfidf = pickle.load(open('vectorizer.pkl','rb'))
-model = pickle.load(open('model.pkl','rb'))
+tfidf = pickle.load(open('vectorizer.pkl', 'rb'))
+model = pickle.load(open('model.pkl', 'rb'))
 
 st.title("Email/SMS Spam Classifier")
 
 input_sms = st.text_area("Enter the message")
 
 if st.button('Predict'):
-
     # 1. preprocess
     transformed_sms = transform_text(input_sms)
     # 2. vectorize
@@ -52,3 +52,9 @@ if st.button('Predict'):
         st.header("Spam")
     else:
         st.header("Not Spam")
+
+# Translation functionality
+if input_sms:
+    translation = translator.translate(input_sms, src='hi', dest='en')
+    st.subheader("Translated Text (English):")
+    st.write(translation.text)
