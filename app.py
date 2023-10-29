@@ -3,6 +3,8 @@ import pickle
 import string
 from nltk.corpus import stopwords
 import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
 from nltk.stem.porter import PorterStemmer
 from googletrans import Translator
 
@@ -39,6 +41,8 @@ model = pickle.load(open('model.pkl', 'rb'))
 st.title("Email/SMS Spam Classifier")
 
 input_sms = st.text_area("Enter the message")
+if input_sms:
+    input_sms = translator.translate(input_sms, src='hi', dest='en').text
 
 if st.button('Predict'):
     # 1. preprocess
@@ -54,7 +58,4 @@ if st.button('Predict'):
         st.header("Not Spam")
 
 # Translation functionality
-if input_sms:
-    translation = translator.translate(input_sms, src='hi', dest='en')
-    st.subheader("Translated Text (English):")
-    st.write(translation.text)
+
